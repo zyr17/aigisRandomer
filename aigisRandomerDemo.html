@@ -1,0 +1,501 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Aigis单位随机器Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="http://libs.baidu.com/jquery/2.1.1/jquery.js"></script>
+        <script src="https://vuejs.org/js/vue.js"></script>
+        <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <script src="http://t.zyr17.cn/js/jquery.wheelmenu.js"></script>
+        <script src="http://t.zyr17.cn/js/FileSaver.min.js"></script>
+        <link rel="stylesheet" href="http://t.zyr17.cn/aigisRandomer/aigisRandomerDemo.css">
+    </head>
+    <body>
+    <div>
+        <div id="navidiv">
+            <div id="rarediv">
+                <span class="buttontitle">稀有度</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)">全部</a></li>
+                        <li><a href="javascript:void(0)">蓝</a></li>
+                        <li><a href="javascript:void(0)">黑</a></li>
+                        <li><a href="javascript:void(0)">白</a></li>
+                        <li><a href="javascript:void(0)">金</a></li>
+                        <li><a href="javascript:void(0)">银</a></li>
+                        <li><a href="javascript:void(0)">铜</a></li>
+                        <li><a href="javascript:void(0)">铁</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="positiondiv">
+                <span class="buttontitle">位置</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)">全部</a></li>
+                        <li><a href="javascript:void(0)">近战</a></li>
+                        <li><a href="javascript:void(0)">远程</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="chosendiv">
+                <span class="buttontitle">已选</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)">全部</a></li>
+                        <li><a href="javascript:void(0)">未选</a></li>
+                        <li><a href="javascript:void(0)">已选</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="costdiv">
+                <span class="buttontitle">COST</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)">全部</a></li>
+                        <li><a href="javascript:void(0)">低(0-15)</a></li>
+                        <li><a href="javascript:void(0)">中(16-25)</a></li>
+                        <li><a href="javascript:void(0)">高(26-?)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="sortdiv">
+                <span class="buttontitle">排序方式</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">名称</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0)">名称</a></li>
+                        <li><a href="javascript:void(0)">稀有度</a></li>
+                        <li><a href="javascript:void(0)">职业</a></li>
+                        <li><a href="javascript:void(0)">COST</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="searchdiv" class="input-group">
+                <input type="text" id="searchinput" class="form-control">
+                <span class="input-group-btn">
+                    <button id="searchbutton" class="btn btn-default" type="button">搜索</button>
+                </span>
+            </div>
+            <div>
+                <button id="randombutton" class="btn btn-default" type="button">随机</button>
+            </div>
+        </div>
+        <div id="navipadding"></div>
+        <div id="unitlistdiv">
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: center; flex: none;">
+                    <span style="margin: 10px; flex: none; font-size: 30px; font-weight: bold;">
+                        数据载入中...(实际上应该是使用说明)
+                    </span>
+                </div>
+                <div style="flex: none; display: flex; justify-content: center;">
+                    <span style="flex: none;">
+                        <input id="notwelcome" type="checkbox"/>自动跳过
+                    </span>
+                    <button id="initbutton" type="button" disabled="disabled">数据载入中...</button>
+                </div>
+            </div>
+        </div>
+        <div id="rightbottomdiv">
+            <a bindwheel="#rightbottomwheel" class="wheel-button" href="javascript:void(0)">+</a>
+            <ul id="rightbottomwheel" class="wheel">
+                <li class="item"><a id="savedata" href="javascript:void(0)" data-toggle="modal" data-target="#savemodal">S</a></li>
+                <li class="item"><a href="javascript:void(0)" data-toggle="modal" data-target="#loadmodal">L</a></li>
+            </ul>
+        </div>
+        <div class="modal fade" id="savemodal" tabindex="-1" role="dialog" aria-labelledby="savemodallabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="savemodallabel">请保存下面的数据</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="savemodaltextarea" readonly="readonly" onclick="this.focus();this.select();"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="loadmodal" tabindex="-1" role="dialog" aria-labelledby="loadmodallabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="loadmodallabel">请填入保存的数据</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="loadmodaltextarea"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button id="loadmodalbutton" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script>
+        //jsondataload & show units
+        var loadingpic = 'http://t.zyr17.cn/static/aigis/images/01c0c0aaf0b2648db5.png';
+
+        var unitlisttemplate = `<div class="unitlistdiv">
+            <div class="oneunitdiv" v-for="(oneunit, index) in unitdata" :key="oneunit.name + oneunit.id" :index="index" :style="'background: ' + (oneunit.selected ? '#AFA;' : 'rgba(0, 0, 0, 0)')">
+                <div class="oneunittitlediv">
+                    <span v-text="oneunit.name"></span>
+                </div>
+                <div class="input-group oneunitdetaildiv">
+                    <!--input id="inputid" type="text" class="form-control"-->
+                    <div class="chosendiv">
+                        <img :src="oneunit.classwithicon[oneunit.selectedclassid][1]">
+                        <span v-text="oneunit.classwithicon[oneunit.selectedclassid][0]"></span>
+                    </div>
+                    <div class="buttondiv">
+                        <div class="costdiv">
+                            <a href="javascript:void(0);" :bindwheel="'#wheel' + index" class="wheel-button" v-text="oneunit.selectedcost"></a>
+                            <ul :id="'wheel' + index">
+                                <li class="item" v-for="c in oneunit.cost"><a href="javascript:void(0)" v-text="c"></a></li>
+                            </ul>
+                        </div>
+                        <div style="height: calc(100% - 60px); border: solid 0px black;"></div>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle unit-class-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right unit-class-list">
+                                <li class="comboboxli" v-for="icondatas in oneunit.classwithicon">
+                                    <a href="javascript:void(0);"><img :src="icondatas[1]"><span>{{ icondatas[0] }}</span></a></li>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--add empty div to remove dropdown-toggle button 'left-radius:0px' css-->
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+        function addunitlist(el, data){
+            $(el).html(`<unitlist :unitdata="${ data }"></unitlist>`);
+        }
+
+        function comboboxliafunc(thisa, vue) {
+            var oud = $($(thisa).parents('.oneunitdiv')[0]);
+            var id = parseInt(oud.attr('index'));
+            for (var i = 0; i < vue.unitdata[id].classwithicon.length; i ++ )
+                if (vue.unitdata[id].classwithicon[i][0] == $(thisa).text())
+                    vue.unitdata[id].selectedclassid = i;
+            unitdatacostupdate(vue.unitdata[id]);
+            unitdatachange(vue.unitdata[id]);
+        }
+
+
+        Vue.component('unitlist', {
+            template: unitlisttemplate,
+            props: [ 'unitdata' ]
+        });
+
+        var unitdata = [];
+        var showdata = [];
+        var unitlistvue;
+
+        function unitdatacostupdate(data) {
+            var selectid = data.selectedclassid;
+            data['cost'] = [];
+            if (data.classwithicon.length > selectid && data.status[data.classwithicon[selectid][0]] != undefined){
+                for (var j = data.status[data.classwithicon[selectid][0]][2]; j <= data.status[data.classwithicon[selectid][0]][1]; j ++ )
+                    data.cost.push(j.toString());
+            }
+            else{
+                data.cost.push('?');
+                console.log('get cost failed: ', data.name);
+            }
+            data['selectedcost'] = data.cost[0];
+        }
+
+        $.getJSON('http://t.zyr17.cn/static/aigis/unitdata.json').done(function (data){
+            for (var name in data){
+                if (data.rare == 7) console.log(data);
+                var i = unitdata.length;
+                unitdata[i] = {};
+                unitdata[i]['name'] = name;
+                unitdata[i]['id'] = 0;
+                for (var j in data[name])
+                    unitdata[i][j] = data[name][j];
+                //if (unitdata.length > 10) break;
+            }
+
+            for (var i = 0; i < unitdata.length; i ++ ){
+                for (var j = 0; j < unitdata[i].classwithicon.length; j ++ ){
+                    r = /^.*?image(\d+).*?([^\\\/]*)$/;
+                    len = unitdata[i].classwithicon[j].length;
+                    if (len == 1)
+                        unitdata[i].classwithicon[j][1] = loadingpic;
+                    imgsrc = unitdata[i].classwithicon[j][1];
+                    if (r.test(imgsrc))
+                        unitdata[i].classwithicon[j][1] = 'http://t.zyr17.cn/static/aigis/images/' + r.exec(imgsrc)[1] + r.exec(imgsrc)[2];
+                    if (j > 0 && unitdata[i].classwithicon[j][1] == loadingpic)
+                        unitdata[i].classwithicon[j][1] = unitdata[i].classwithicon[j - 1][1];
+                }
+                unitdata[i]['selectedclassid'] = 0;
+                unitdata[i]['selected'] = false;
+                unitdatacostupdate(unitdata[i]);
+            }
+            loadlocaldata();
+            console.log('data load ok');
+            $('#initbutton').text('载入完成，点击进入');
+            $('#initbutton').attr('disabled', false);
+            if ($('#notwelcome').prop('checked'))
+                $('#initbutton').click();
+        });
+
+        function loadlocaldata() {
+            var nowlength = unitdata.length;
+            for (var i = 0; i < nowlength; i ++ ){
+                if (localStorage[unitdata[i].name] != undefined){
+                    console.log('get data', unitdata[i].name);
+                    var localdata = JSON.parse(localStorage[unitdata[i].name]);
+                    for (var j = 0; j < localdata.length; j ++ )
+                        if (localdata[j].id == 0){
+                            unitdata[i].selected = true;
+                            unitdata[i].selectedclassid = localdata[j].classid == undefined ? 0 : localdata[j].classid;
+                            unitdatacostupdate(unitdata[i]);
+                            if (localdata[j].cost != undefined)
+                                unitdata[i].selectedcost = localdata[j].cost;
+                        }
+                    //TODO 复制人数据加载
+                }
+            }
+        }
+
+
+        function unitdataload(el, vue, unitdata, mounted = () => {} ) {
+            vue.unitdata = unitdata;
+            vue.$nextTick(function () {
+                $(el + ' .comboboxli a').click(function () { comboboxliafunc(this, vue); });
+                $(el + ' .wheel-button').wheelmenu({ animation: "fade", animationSpeed: "fast", angle: "all", trigger: "hover" });
+                //$('.wheel-button').click(function () { return false; });
+                $(el + ' .wheel li a').click(function () {
+                    var id = $($(this).parents('.oneunitdiv')[0]).attr('index');
+                    vue.unitdata[id].selectedcost = $(this).text();
+                    unitdatachange(vue.unitdata[id]);
+                    //$($(this).parents('.wheel')[0]).mouseleave();
+                });
+                $(el + ' .wheel').click(function () {
+                    $(this).mouseleave();
+                });
+                $(el + ' .oneunittitlediv, ' + el + ' .chosendiv').click(function () {
+                    var id = $($(this).parents('.oneunitdiv')[0]).attr('index');
+                    vue.unitdata[id].selected = !vue.unitdata[id].selected;
+                    unitdatachange(vue.unitdata[id]);
+                });
+                changeunitclasslistwidth();
+                mounted();
+            });
+            return vue;
+        }
+
+        $(window).scroll(function () {
+            $('.wheel.active').mouseleave();
+        });
+
+        function unitdatachange(oneunit) {
+            //console.log('unitdatachange', oneunit, localStorage[oneunit.name]);
+            if (localStorage[oneunit.name] != undefined && !oneunit.selected){
+                var localdata = JSON.parse(localStorage[oneunit.name]);
+                for (var i = 0; i < localdata.length; i ++ )
+                    if (localdata[i].id == oneunit.id){
+                        localdata.splice(i, 1);
+                        break;
+                    }
+                if (localdata.length == 0)
+                    localStorage.removeItem(oneunit.name);
+                else
+                    localStorage[oneunit.name] = JSON.stringify(localdata);
+                return;
+            }
+            if (oneunit.selected){
+                savedata = { cost: oneunit.selectedcost, classid: oneunit.selectedclassid, id: oneunit.id };
+                var localdata;
+                if (localStorage[oneunit.name] == undefined)
+                    localdata = [];
+                else
+                    localdata = JSON.parse(localStorage[oneunit.name]);
+                var index = 0;
+                for (; index < localdata.length; index ++ )
+                    if (localdata[index].id == oneunit.id)
+                        break;
+                if (index < localdata.length)
+                    localdata[index] = savedata;
+                else
+                    localdata.push(savedata);
+                localStorage[oneunit.name] = JSON.stringify(localdata);
+            }
+        }
+
+        function checkoneunit(unit) {
+            var chosen = $('#navidiv #rarediv button .navichosen').text();
+            if (chosen == '蓝' && unit.rare != 7) return false;
+            if (chosen == '黑' && unit.rare != 6) return false;
+            if (chosen == '白' && unit.rare != 5) return false;
+            if (chosen == '金' && unit.rare != 4) return false;
+            if (chosen == '银' && unit.rare != 3) return false;
+            if (chosen == '铜' && unit.rare != 2) return false;
+            if (chosen == '铁' && unit.rare != 1) return false;
+            chosen = $('#navidiv #positiondiv button .navichosen').text();
+            if (chosen == '近战' && unit.position != 'close') return false;
+            if (chosen == '远程' && unit.position != 'far') return false;
+            chosen = $('#navidiv #chosendiv button .navichosen').text();
+            if (chosen == '已选' && !unit.selected) return false;
+            if (chosen == '未选' && unit.selected) return false;
+            chosen = $('#navidiv #costdiv button .navichosen').text();
+            if (chosen[0] == '低' && (unit.selectedcost == '?' || unit.selectedcost > 15)) return false;
+            if (chosen[0] == '中' && (unit.selectedcost == '?' || unit.selectedcost < 16 || unit.selectedcost > 25)) return false;
+            if (chosen[0] == '高' && unit.selectedcost != '?' && unit.selectedcost < 26) return false;
+            chosen = $('#navidiv #searchdiv #searchinput').val();
+            if (RegExp(chosen).exec(unit.name) == undefined) return false;
+            return true;
+        }
+
+        function unitsortcompare(a, b) {
+            var chosen = $('#navidiv #sortdiv button .navichosen').text();
+            if (chosen == '名称') return a.name.localeCompare(b.name);
+            if (chosen == '稀有度'){
+                if (a.rare > b.rare) return -1;
+                if (a.rare == b.rare) return 0;
+                return 1;
+            }
+            //TODO 读取职业顺序表排序
+            if (chosen == '职业') return a.position.localeCompare(b.position);
+            var an = a.selectedcost, bn = b.selectedcost;
+            if (an == '?' && bn == '?') return 0;
+            if (an == '?') return 1;
+            if (bn == '?') return -1;
+            an = parseInt(an);
+            bn = parseInt(bn);
+            if (an < bn) return -1;
+            if (an == bn) return 0;
+            return 1;
+        }
+
+        //[min, max)
+        function getrandomint(min, max) {
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+
+        var israndom15 = false;
+        function generateunitlist() {
+            showdata = [];
+            for (var i = 0; i < unitdata.length; i ++ )
+                if (checkoneunit(unitdata[i]))
+                    showdata.push(unitdata[i]);
+            if (israndom15){
+                if (showdata.length > 15){
+                    for (var i = 0; i < 15; i ++ ){
+                        var j = getrandomint(i, showdata.length);
+                        var tmp = showdata[i];
+                        showdata[i] = showdata[j];
+                        showdata[j] = tmp;
+                    }
+                }
+                showdata.splice(15, showdata.length);
+            }
+            israndom15 = false;
+            showdata = showdata.sort(unitsortcompare);
+            return showdata;
+        }
+
+        var updating = false;
+        function unitlistupdate(vue, el) {
+            if (updating) return;
+            updating = true;
+            $('html,body').animate({ scrollTop: 0 }, 333);
+            $('#unitlistdiv').animate({ opacity: '0' }, 333, function () {
+                showdata = generateunitlist();
+                if (vue == undefined){
+                    addunitlist(el, 'unitdata');
+                    vue = new Vue({ el: el, data: { unitdata: [] } });
+                }
+                unitdataload(el, vue, showdata, () => {
+                    $(el).animate({ opacity: '1' }, 500);
+                });
+                updating = false;
+            });
+            return vue;
+        }
+
+        $('#initbutton').click(function () {
+            unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
+        });
+
+        $('#notwelcome').click(function () {
+            if ($(this).prop('checked'))
+                localStorage['notwelcome'] = 'true';
+            else
+                localStorage.removeItem('notwelcome');
+        });
+
+        $('#navidiv ul li a').click(function () {
+            $(this).parents('.btn-group').find('button .navichosen').text($(this).text());
+        });
+
+        $('#navidiv #costdiv ul li a').click(function () {
+            $(this).parents('.btn-group').find('button .navichosen').text($(this).text() != '全部' ? $(this).text()[0] : '全部');
+        });
+
+        $('#searchbutton').click(function () {
+            unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
+        });
+
+        $('#randombutton').click(function () {
+            israndom15 = true;
+            unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
+        });
+
+        $('#rightbottomdiv .wheel-button').wheelmenu({ animation: "fade", animationSpeed: "fast", trigger: "hover" });
+        
+        $('a#savedata').click(function () {
+            //var blob = new Blob([JSON.stringify(localStorage)], { type: "text/plain;charset=utf8" });
+            //saveAs(blob, "unitdata.json");
+            $('#savemodaltextarea').val(JSON.stringify(localStorage));
+        });
+
+        $('#loadmodalbutton').click(function () {
+            //alert('not supported now!');
+            try{
+                var data = JSON.parse($('#loadmodaltextarea').val());
+                if (Object.keys(data).length == 0){
+                    alert('空数据！不载了！');
+                    return;
+                }
+                localStorage.clear();
+                for (var i in data)
+                    localStorage[i] = data[i];
+                alert('导入成功！为更新数据将刷新网页！');
+                location.reload();
+            }
+            catch(err){
+                alert('载入错误！可在控制台查看错误信息。');
+                console.log(err);
+            }
+        });
+        
+        if (localStorage.notwelcome != undefined){
+            $('#notwelcome').prop('checked', true);
+        }
+
+        function changeunitclasslistwidth(){
+            $('.unit-class-list').css('width', $('.chosendiv').css('width'));
+        }
+        $(window).resize(changeunitclasslistwidth);
+    </script>
+</html>

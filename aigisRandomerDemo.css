@@ -1,0 +1,157 @@
+body{
+    overflow: scroll;
+    overflow-x: hidden;
+}
+#navidiv {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 100;
+    background: #AAF;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+#navidiv, #navipadding {
+    height: 50px;
+    padding: 10px 0px;
+}
+#searchdiv {
+    width: 25%;
+}
+#navidiv .buttontitle {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+#rarediv > div > * {
+    min-width: 70px;
+    width: 70px;
+}
+#positiondiv > div > * {
+    min-width: 70px;
+    width: 70px;
+}
+#costdiv > div > * {
+    min-width: 110px;
+    width: 110px;
+}
+#costdiv > div > button {
+    min-width: 70px;
+    width: 70px;
+}
+#chosendiv > div > * {
+    min-width: 70px;
+    width: 70px;
+}
+#sortdiv > div > * {
+    min-width: 80px;
+    width: 80px;
+}
+#randombutton {
+    font-weight: bold;
+}
+.unitlistdiv {
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap;
+    margin: 10px;
+}
+.oneunitdiv {
+    margin: 0px 35px 20px 0px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px #CCC;
+    width: calc(20% - 35px);
+    min-width: 220px;
+}
+.oneunittitlediv {
+    justify-content: center;
+}
+.oneunittitlediv span {
+    font-size: 18px; 
+    font-weight: bold;
+}
+.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a {
+    display: flex;
+}
+.oneunittitlediv > *, .oneunitdetaildiv > *, .buttondiv > *, #navidiv > * {
+    flex: none;
+}
+.chosendiv {
+    align-self: center;
+}
+.chosendiv {
+    width: calc(100% - 30px);
+}
+.chosendiv > img, .comboboxli > a > img {
+    min-width: 90px;
+    min-height: 90px;
+    width: 40%;
+}
+.buttondiv {
+    flex-direction: column;
+}
+.costdiv {
+    height: 30px;
+}
+.wheel-button {
+    position: relative;
+}
+.wheel {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 130px; /* this will determine the diameter of the circle  */
+    height: 130px; /* this will determine the diameter of the circle  */
+    visibility: hidden;
+    position: relative;
+    display: none;
+}
+.wheel li {
+    overflow: hidden;
+    float:left;
+}
+.wheel li a, .wheel li a:visited, .wheel-button, .wheel-button:visited, .wheel-button:hover, .wheel-button:focus {
+    display: block;
+    background: #595959;
+    border: 1px solid black;
+    width: 30px;
+    height: 30px;
+    padding: 5px 0 0 0;
+    border-radius: 1000px;
+    color: #FFF;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.5);
+
+}
+.wheel li a:hover {
+    background: #333333;
+}
+.dropdown-toggle.unit-class-toggle {
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+}
+.dropdown-menu.unit-class-list li a, .chosendiv {
+    padding: 3px 5px;
+    white-space: normal;
+    align-items: center;
+}
+.dropdown-menu.unit-class-list > li > a > span, .chosendiv > span {
+    padding-left: 3px;
+}
+#rightbottomdiv {
+    z-index: 100;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 50px;
+    height: 30px;
+}
+#savemodaltextarea, #loadmodaltextarea {
+    width: 100%;
+    height: 300px;
+}
