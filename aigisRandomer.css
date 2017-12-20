@@ -72,7 +72,7 @@ body{
     font-size: 18px; 
     font-weight: bold;
 }
-.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a {
+.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a, #footerdiv {
     display: flex;
 }
 .oneunittitlediv > *, .oneunitdetaildiv > *, .buttondiv > *, #navidiv > * {
@@ -143,13 +143,18 @@ body{
 .dropdown-menu.unit-class-list > li > a > span, .chosendiv > span {
     padding-left: 3px;
 }
-#rightbottomdiv {
+#footerdiv {
     z-index: 100;
     position: fixed;
-    bottom: 15px;
-    right: 15px;
-    width: 50px;
-    height: 30px;
+    bottom: 0px;
+    background: #AAF;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+}
+#footerdiv, #footerpadding {
+    height: 40px;
 }
 #savemodaltextarea, #loadmodaltextarea {
     width: 100%;
