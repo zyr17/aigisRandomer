@@ -1,5 +1,5 @@
 ﻿
-var loadingpic = 'http://t.zyr17.cn/static/images/aigis/01c0c0aaf0b2648db5.png';
+var loadingpic = 'images/01c0c0aaf0b2648db5.png';
 
 //one unitlist block template
 var unitlisttemplate = `<div class="unitlistdiv">
@@ -45,6 +45,12 @@ var unitlisttemplate = `<div class="unitlistdiv">
     </div>
 </div>`;
 
+//register unitlist Vue component
+Vue.component('unitlist', {
+    template: unitlisttemplate,
+    props: [ 'unitdata' ]
+});
+
 //replace <unitlist> under el
 function addunitlist(el, data){
     $(el).html(`<unitlist :unitdata="${ data }"></unitlist>`);
@@ -61,15 +67,10 @@ function dropdownliafunc(thisa, vue) {
     unitdatachange(vue.unitdata[id]);
 }
 
-//register unitlist Vue component
-Vue.component('unitlist', {
-    template: unitlisttemplate,
-    props: [ 'unitdata' ]
-});
-
 var unitdata = []; //full unitdata array
 var showdata = []; //temp array for unitdatas that will show
 var unitlistvue; //unitlist Vue instance
+var randomresultimgvue; //random result Vue instance
 
 //load unitlist.json
 function loaddataJSON(path){
@@ -93,7 +94,7 @@ function loaddataJSON(path){
                     unitdata[i].classwithicon[j][1] = loadingpic;
                 imgsrc = unitdata[i].classwithicon[j][1];
                 if (r.test(imgsrc))
-                    unitdata[i].classwithicon[j][1] = 'http://t.zyr17.cn/static/images/aigis/' + r.exec(imgsrc)[1] + r.exec(imgsrc)[2];
+                    unitdata[i].classwithicon[j][1] = 'images/' + r.exec(imgsrc)[1] + r.exec(imgsrc)[2];
                 if (j > 0 && unitdata[i].classwithicon[j][1] == loadingpic)
                     unitdata[i].classwithicon[j][1] = unitdata[i].classwithicon[j - 1][1];
             }
@@ -233,8 +234,8 @@ function getrandomint(min, max) {
 }
 
 
-//check one unitdata whether pass filter
-function checkoneunit(unit) {
+//check one unitdata whether pass navi filter
+function checkoneunitnavi(unit) {
     var chosen = $('#navidiv #rarediv button .navichosen').text();
     if (chosen == '蓝' && unit.rare != 7) return false;
     if (chosen == '黑' && unit.rare != 6) return false;
@@ -258,27 +259,80 @@ function checkoneunit(unit) {
     return true;
 }
 
+//check one unitdata whether pass random filter
+function checkoneunitrandom(unit) {
+	if (!unit.selected) return false;
+	return true;
+}
+
+//use units in unitlist and generate unitlist pass random filter
+function makelegalunitlist(inunitlist, number = 15) {
+	var unitlist = [].concat(inunitlist);
+	for (var randomcount = 0; randomcount < 10000; randomcount ++ ){
+		var nowres = [];
+		for (var j = 0; j < number; j ++ ){
+			var rndpos = getrandomint(j, unitlist.length);
+			var tmp = unitlist[j];
+			unitlist[j] = unitlist[rndpos];
+			unitlist[rndpos] = tmp;
+			nowres.push(unitlist[j]);
+		}
+		var closenum = 0, totcost = 0, costnum = 0;
+		for (var i in nowres){
+			if (nowres[i].position == 'close') closenum ++ ;
+			if (!isNaN(parseInt(nowres[i].selectedcost))){
+				costnum ++ ;
+				totcost += parseInt(nowres[i].selectedcost);
+			}
+		}
+		var farnum = number - closenum;
+		var chosen = $('#randommodal #randomclosenumdiv .random-limit-min button .randomchosen').text();
+		var closemin = parseInt(chosen);
+		chosen = $('#randommodal #randomclosenumdiv .random-limit-max button .randomchosen').text();
+		var closemax = parseInt(chosen);
+		chosen = $('#randommodal #randomfarnumdiv .random-limit-min button .randomchosen').text();
+		var farmin = parseInt(chosen);
+		chosen = $('#randommodal #randomfarnumdiv .random-limit-max button .randomchosen').text();
+		var farmax = parseInt(chosen);
+		chosen = $('#randommodal #randomcostavgdiv .random-limit-min').val();
+		var costavgmin = parseInt(chosen);
+		chosen = $('#randommodal #randomcostavgdiv .random-limit-max').val();
+		var costavgmax = parseInt(chosen);
+		//console.log(closenum, farnum, totcost, costnum, closemin, closemax, farmin, farmax, costavgmin, costavgmax);
+		if (closenum < closemin || closenum > closemax) continue;
+		if (farnum < farmin || farnum > farmax) continue;
+		totcost /= 1.0 * costnum;
+		if (totcost < costavgmin || totcost > costavgmax) continue;
+		return nowres;
+	}
+	return undefined;
+}
+
 //generate new unitlist use filter and order. if israndom15, randomly choose at most 15 unit and sort
-var israndom15 = false;
 function generateunitlist() {
     showdata = [];
     for (var i = 0; i < unitdata.length; i ++ )
-        if (checkoneunit(unitdata[i]))
+        if (checkoneunitnavi(unitdata[i]))
             showdata.push(unitdata[i]);
-    if (israndom15){
-        if (showdata.length > 15){
-            for (var i = 0; i < 15; i ++ ){
-                var j = getrandomint(i, showdata.length);
-                var tmp = showdata[i];
-                showdata[i] = showdata[j];
-                showdata[j] = tmp;
-            }
-        }
-        showdata.splice(15, showdata.length);
-    }
-    israndom15 = false;
     showdata = showdata.sort(unitsortcompare);
     return showdata;
+}
+
+//generate random unitlist
+function generaterandomunitlist() {
+    showdata = [];
+    for (var i = 0; i < unitdata.length; i ++ )
+        if (checkoneunitrandom(unitdata[i]))
+            showdata.push(unitdata[i]);
+    showdata = makelegalunitlist(showdata);
+    return showdata;
+}
+
+function randomunitlistupdate(vue, el) {
+	var res = generaterandomunitlist();
+	vue.unitdata = res;
+	if (res.length == 0) return false;
+	return true;
 }
 
 //update unitlist with filter, make animation
@@ -294,6 +348,7 @@ function unitlistupdate(vue, el) {
             vue = new Vue({ el: el, data: { unitdata: [] } });
         }
         unitdataload(el, vue, showdata, () => {
+            $(el).animate({ opacity: '0' }, showdata.length * 2);
             $(el).animate({ opacity: '1' }, 500);
         });
         unitlistupdating = false;

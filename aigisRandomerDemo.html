@@ -85,9 +85,6 @@
                     <button id="searchbutton" class="btn btn-default" type="button">搜索</button>
                 </span>
             </div>
-            <div>
-                <button id="randombutton" class="btn btn-default" type="button">随机</button>
-            </div>
         </div>
         <div id="navipadding"></div>
         <div id="unitlistdiv">
@@ -101,11 +98,12 @@
                     <span style="flex: none;">
                         <input id="notwelcome" type="checkbox"/>自动跳过
                     </span>
-                    <button id="initbutton" type="button" disabled="disabled">数据载入中...</button>
+                    <button id="initbutton" type="button" disabled>数据载入中...</button>
                 </div>
             </div>
         </div>
         <div id="footerdiv">
+            <button type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#randommodal">随机</button>
             <button type="button" class="btn btn-default" id="savedata" href="javascript:void(0)" data-toggle="modal" data-target="#savemodal">保存</button>
             <button type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#loadmodal">加载</button>
         </div>
@@ -143,11 +141,176 @@
                 </div>
             </div>
         </div>
-    </div>
+		<div class="modal fade" id="randommodal" tabindex="-1" role="dialog" aria-labelledby="randommodallabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 90%;">
+                <div class="modal-content">
+                    <div class="modal-body" style="display: none;">
+                        <h3><input type="checkbox" value="#rulechoosediv">从满足以下规则的单位中选择</h3>
+                    </div>
+					<div class="modal-body" id="rulechoosediv" style="display: none">
+						从满足以下规则的单位中选择
+					</div>
+                    <div class="modal-body" style="display: none;">
+                        <h3><input type="checkbox" value="#ruleremovediv">排除满足以下规则的单位</h3>
+                    </div>
+					<div class="modal-body" id="ruleremovediv" style="display: none">
+						排除满足以下规则的单位
+					</div>
+                    <div class="modal-body">
+                        <h3><input type="checkbox" value="#rulerandomdiv" checked>队伍编成需要满足的条件</h3>
+                    </div>
+					<div class="modal-body" id="rulerandomdiv" style="display: flex">
+						<div id="randomclosenumdiv">
+							<span class="buttontitle">近战数量：最少</span>
+							<div class="btn-group random-limit-min">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">0</span> <span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="javascript:void(0)">0</a></li>
+									<li><a href="javascript:void(0)">1</a></li>
+									<li><a href="javascript:void(0)">2</a></li>
+									<li><a href="javascript:void(0)">3</a></li>
+									<li><a href="javascript:void(0)">4</a></li>
+									<li><a href="javascript:void(0)">5</a></li>
+									<li><a href="javascript:void(0)">6</a></li>
+									<li><a href="javascript:void(0)">7</a></li>
+									<li><a href="javascript:void(0)">8</a></li>
+									<li><a href="javascript:void(0)">9</a></li>
+									<li><a href="javascript:void(0)">10</a></li>
+									<li><a href="javascript:void(0)">11</a></li>
+									<li><a href="javascript:void(0)">12</a></li>
+									<li><a href="javascript:void(0)">13</a></li>
+									<li><a href="javascript:void(0)">14</a></li>
+									<li><a href="javascript:void(0)">15</a></li>
+								</ul>
+							</div>
+							<span class="buttontitle">最多</span>
+							<div class="btn-group random-limit-max">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">10</span> <span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="javascript:void(0)">0</a></li>
+									<li><a href="javascript:void(0)">1</a></li>
+									<li><a href="javascript:void(0)">2</a></li>
+									<li><a href="javascript:void(0)">3</a></li>
+									<li><a href="javascript:void(0)">4</a></li>
+									<li><a href="javascript:void(0)">5</a></li>
+									<li><a href="javascript:void(0)">6</a></li>
+									<li><a href="javascript:void(0)">7</a></li>
+									<li><a href="javascript:void(0)">8</a></li>
+									<li><a href="javascript:void(0)">9</a></li>
+									<li><a href="javascript:void(0)">10</a></li>
+									<li><a href="javascript:void(0)">11</a></li>
+									<li><a href="javascript:void(0)">12</a></li>
+									<li><a href="javascript:void(0)">13</a></li>
+									<li><a href="javascript:void(0)">14</a></li>
+									<li><a href="javascript:void(0)">15</a></li>
+								</ul>
+							</div>
+						</div>
+						<div id="randomfarnumdiv">
+							<span class="buttontitle">远程数量：最少</span>
+							<div class="btn-group random-limit-min">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">0</span> <span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="javascript:void(0)">0</a></li>
+									<li><a href="javascript:void(0)">1</a></li>
+									<li><a href="javascript:void(0)">2</a></li>
+									<li><a href="javascript:void(0)">3</a></li>
+									<li><a href="javascript:void(0)">4</a></li>
+									<li><a href="javascript:void(0)">5</a></li>
+									<li><a href="javascript:void(0)">6</a></li>
+									<li><a href="javascript:void(0)">7</a></li>
+									<li><a href="javascript:void(0)">8</a></li>
+									<li><a href="javascript:void(0)">9</a></li>
+									<li><a href="javascript:void(0)">10</a></li>
+									<li><a href="javascript:void(0)">11</a></li>
+									<li><a href="javascript:void(0)">12</a></li>
+									<li><a href="javascript:void(0)">13</a></li>
+									<li><a href="javascript:void(0)">14</a></li>
+									<li><a href="javascript:void(0)">15</a></li>
+								</ul>
+							</div>
+							<span class="buttontitle">最多</span>
+							<div class="btn-group random-limit-max">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">10</span> <span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="javascript:void(0)">0</a></li>
+									<li><a href="javascript:void(0)">1</a></li>
+									<li><a href="javascript:void(0)">2</a></li>
+									<li><a href="javascript:void(0)">3</a></li>
+									<li><a href="javascript:void(0)">4</a></li>
+									<li><a href="javascript:void(0)">5</a></li>
+									<li><a href="javascript:void(0)">6</a></li>
+									<li><a href="javascript:void(0)">7</a></li>
+									<li><a href="javascript:void(0)">8</a></li>
+									<li><a href="javascript:void(0)">9</a></li>
+									<li><a href="javascript:void(0)">10</a></li>
+									<li><a href="javascript:void(0)">11</a></li>
+									<li><a href="javascript:void(0)">12</a></li>
+									<li><a href="javascript:void(0)">13</a></li>
+									<li><a href="javascript:void(0)">14</a></li>
+									<li><a href="javascript:void(0)">15</a></li>
+								</ul>
+							</div>
+						</div>
+						<div id="randomcostavgdiv">
+							<span>平均COST：最低 </span>
+							<input type="text" class="form-control random-limit-min" id="randommincostinput" value="12">
+							<span> 最高 </span>
+							<input type="text" class="form-control random-limit-max" id="randommaxcostinput" value="22">
+						</div>
+					</div>
+                    <div class="modal-body" style="display: none;">
+                        <h3><input type="checkbox" value="#rulegroupdiv">选择预编队伍概率</h3>
+                    </div>
+					<div class="modal-body" id="rulegroupdiv" style="display: none">
+						选择预编队伍概率
+					</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button id="randommodalresultbutton" type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#randomresultmodal">随机</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="modal fade" id="randomresultmodal" tabindex="-1" role="dialog" aria-labelledby="randomresultmodallabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="randomresultmodallabel">随机结果</h4>
+                    </div>
+                    <div class="modal-body">
+						<div id="randomresultimgdiv" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+							<div v-for="oneunit in unitdata" style="width: 15%; margin: 10px 2.5%">
+								<img style="width: 100%" :src="oneunit.classwithicon[oneunit.selectedclassid][1]" :title="oneunit.name">
+							</div>
+							<div v-if="unitdata == undefined || unitdata.length == 0" class="alert alert-danger">未能在指定次数生成满足要求的随机结果！请检查随机条件是否存在矛盾，或者降低要求以增加随机成功率。</div>
+						</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
     </body>
     <script>
 
-
+		$('#randommodal .modal-body > h3 > input').click(function () {
+			var divid = $(this).attr('value');
+			if ($(this).prop('checked'))
+				$(divid).css('display', '');
+			else $(divid).css('display', 'none');
+		});
+		
+		$('#randommodalresultbutton').click(function () {
+			if (!randomunitlistupdate(randomresultimgvue, '#randomresultimgdiv')){
+				// random failed
+			}
+		});
+	
+		//when scroll, close all wheel menu
         $(window).scroll(function () {
             $('.wheel.active').mouseleave();
         });
@@ -171,8 +334,13 @@
         }
 
         //change selected when navi dropdown clicked
-        $('#navidiv ul li a').click(function () {
+        $('#navidiv ul.dropdown-menu li a').click(function () {
             $(this).parents('.btn-group').find('button .navichosen').text($(this).text());
+        });
+		
+        //change selected when random dropdown clicked
+        $('#randommodal ul.dropdown-menu li a').click(function () {
+            $(this).parents('.btn-group').find('button .randomchosen').text($(this).text());
         });
 
         //change selected specially for #costdiv
@@ -182,12 +350,6 @@
 
         //update unitlist
         $('#searchbutton').click(function () {
-            unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
-        });
-
-        //show 15 random unit within current filter
-        $('#randombutton').click(function () {
-            israndom15 = true;
             unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
         });
 
@@ -217,6 +379,8 @@
                 console.log(err);
             }
         });
+		
+		randomresultimgvue = new Vue({el: '#randomresultimgdiv', data: { unitdata: [] }});
         
         loaddataJSON('unitdata.json');
     </script>
