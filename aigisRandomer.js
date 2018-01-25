@@ -45,10 +45,25 @@ var unitlisttemplate = `<div class="unitlistdiv">
     </div>
 </div>`;
 
+var dropdownToggleTemplate = `<div>
+	<span class="buttontitle">{{ title }}</span>
+	<div :class="'btn-group ' + (btngroupclass == undefined ? '' : btngroupclass)">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span :class="chosenclass">{{ chosenindex == undefined ? texts[0] : texts[chosenindex] }}</span> <span class="caret"></span></button>
+		<ul class="dropdown-menu" role="menu">
+			<li v-for="text in texts"><a href="javascript:void(0)">{{ text }}</a></li>
+		</ul>
+	</div>
+</div>`;
+
 //register unitlist Vue component
 Vue.component('unitlist', {
     template: unitlisttemplate,
     props: [ 'unitdata' ]
+});
+
+Vue.component('customdropdown', {
+	template: dropdownToggleTemplate,
+	props: [ 'texts', 'title', 'btngroupclass', 'chosenindex', 'chosenclass' ]
 });
 
 //replace <unitlist> under el
@@ -233,17 +248,12 @@ function getrandomint(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+var rareToNumber = { '蓝': 7, '黑': 6, '白': 5, '金': 4, '银': 3, '铜': 2, '铁': 1 };
 
 //check one unitdata whether pass navi filter
 function checkoneunitnavi(unit) {
     var chosen = $('#navidiv #rarediv button .navichosen').text();
-    if (chosen == '蓝' && unit.rare != 7) return false;
-    if (chosen == '黑' && unit.rare != 6) return false;
-    if (chosen == '白' && unit.rare != 5) return false;
-    if (chosen == '金' && unit.rare != 4) return false;
-    if (chosen == '银' && unit.rare != 3) return false;
-    if (chosen == '铜' && unit.rare != 2) return false;
-    if (chosen == '铁' && unit.rare != 1) return false;
+	if (rareToNumber[chosen] != undefined && unit.rare != rareToNumber[chosen]) return false;
     chosen = $('#navidiv #positiondiv button .navichosen').text();
     if (chosen == '近战' && unit.position != 'close') return false;
     if (chosen == '远程' && unit.position != 'far') return false;
@@ -331,7 +341,7 @@ function generaterandomunitlist() {
 function randomunitlistupdate(vue, el) {
 	var res = generaterandomunitlist();
 	vue.unitdata = res;
-	if (res.length == 0) return false;
+	if (res == undefined || res.length == 0) return false;
 	return true;
 }
 

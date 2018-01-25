@@ -18,66 +18,19 @@
     <div>
         <div id="navidiv">
             <div id="rarediv">
-                <span class="buttontitle">稀有度</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">蓝</a></li>
-                        <li><a href="javascript:void(0)">黑</a></li>
-                        <li><a href="javascript:void(0)">白</a></li>
-                        <li><a href="javascript:void(0)">金</a></li>
-                        <li><a href="javascript:void(0)">银</a></li>
-                        <li><a href="javascript:void(0)">铜</a></li>
-                        <li><a href="javascript:void(0)">铁</a></li>
-                    </ul>
-                </div>
+				<customdropdown title="稀有度" chosenclass="navichosen" :texts="['全部', '蓝', '黑', '白', '金', '银', '铜', '铁']"></customdropdown>
             </div>
             <div id="positiondiv">
-                <span class="buttontitle">位置</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">近战</a></li>
-                        <li><a href="javascript:void(0)">远程</a></li>
-                    </ul>
-                </div>
+				<customdropdown title="位置" chosenclass="navichosen" :texts="['全部', '近战', '远程']"></customdropdown>
             </div>
             <div id="chosendiv">
-                <span class="buttontitle">已选</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">未选</a></li>
-                        <li><a href="javascript:void(0)">已选</a></li>
-                    </ul>
-                </div>
+				<customdropdown title="已选" chosenclass="navichosen" :texts="['全部', '已选', '未选']"></customdropdown>
             </div>
             <div id="costdiv">
-                <span class="buttontitle">COST</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">低(0-15)</a></li>
-                        <li><a href="javascript:void(0)">中(16-25)</a></li>
-                        <li><a href="javascript:void(0)">高(26-?)</a></li>
-                    </ul>
-                </div>
+				<customdropdown title="COST" chosenclass="navichosen" :texts="['全部', '低(0-15)', '中(16-25)', '高(26-?)']"></customdropdown>
             </div>
             <div id="sortdiv">
-                <span class="buttontitle">排序方式</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">名称</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">名称</a></li>
-                        <li><a href="javascript:void(0)">稀有度</a></li>
-                        <li><a href="javascript:void(0)">职业</a></li>
-                        <li><a href="javascript:void(0)">COST</a></li>
-                    </ul>
-                </div>
+				<customdropdown title="排序方式" chosenclass="navichosen" :texts="['默认', '稀有度', '职业', 'COST']"></customdropdown>
             </div>
             <div id="searchdiv" class="input-group">
                 <input type="text" id="searchinput" class="form-control">
@@ -161,96 +114,12 @@
                     </div>
 					<div class="modal-body" id="rulerandomdiv" style="display: flex">
 						<div id="randomclosenumdiv">
-							<span class="buttontitle">近战数量：最少</span>
-							<div class="btn-group random-limit-min">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">0</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
-							<span class="buttontitle">最多</span>
-							<div class="btn-group random-limit-max">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">10</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
+							<customdropdown title="近战数量：最少" btngroupclass="random-limit-min" chosenclass="randomchosen" :texts="zerotofifteen"></customdropdown>
+							<customdropdown title="最多" btngroupclass="random-limit-max" chosenclass="randomchosen" :texts="zerotofifteen" chosenindex="10"></customdropdown>
 						</div>
 						<div id="randomfarnumdiv">
-							<span class="buttontitle">远程数量：最少</span>
-							<div class="btn-group random-limit-min">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">0</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
-							<span class="buttontitle">最多</span>
-							<div class="btn-group random-limit-max">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">10</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
+							<customdropdown title="远程数量：最少" btngroupclass="random-limit-min" chosenclass="randomchosen" :texts="zerotofifteen"></customdropdown>
+							<customdropdown title="最多" btngroupclass="random-limit-max" chosenclass="randomchosen" :texts="zerotofifteen" chosenindex="10"></customdropdown>
 						</div>
 						<div id="randomcostavgdiv">
 							<span>平均COST：最低 </span>
@@ -284,7 +153,7 @@
 							<div v-for="oneunit in unitdata" style="width: 15%; margin: 10px 2.5%">
 								<img style="width: 100%" :src="oneunit.classwithicon[oneunit.selectedclassid][1]" :title="oneunit.name">
 							</div>
-							<div v-if="unitdata == undefined || unitdata.length == 0" class="alert alert-danger">未能在指定次数生成满足要求的随机结果！请检查随机条件是否存在矛盾，或者降低要求以增加随机成功率。</div>
+							<div v-if="unitdata == undefined || unitdata.length == 0" class="alert alert-danger">未能在10000次随机生成满足要求的随机结果！请检查随机条件是否存在矛盾，或者降低要求以增加随机成功率。</div>
 						</div>
                     </div>
                     <div class="modal-footer">
@@ -296,6 +165,14 @@
 	</div>
     </body>
     <script>
+	
+		new Vue({
+			el: '#rulerandomdiv',
+			data: { zerotofifteen: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] }
+		});
+		new Vue({
+			el: '#navidiv'
+		});
 
 		$('#randommodal .modal-body > h3 > input').click(function () {
 			var divid = $(this).attr('value');

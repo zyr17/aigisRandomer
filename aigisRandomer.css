@@ -24,27 +24,27 @@ body{
     font-size: 14px;
     font-weight: bold;
 }
-#rarediv > div > * {
+#rarediv > div > div > * {
     min-width: 70px;
     width: 70px;
 }
-#positiondiv > div > * {
+#positiondiv > div > div  > * {
     min-width: 70px;
     width: 70px;
 }
-#costdiv > div > * {
+#costdiv > div  > div > * {
     min-width: 110px;
     width: 110px;
 }
-#costdiv > div > button {
+#costdiv > div  > div > button {
     min-width: 70px;
     width: 70px;
 }
-#chosendiv > div > * {
+#chosendiv > div  > div > * {
     min-width: 70px;
     width: 70px;
 }
-#sortdiv > div > * {
+#sortdiv > div  > div > * {
     min-width: 80px;
     width: 80px;
 }
@@ -142,6 +142,11 @@ body{
 }
 .dropdown-menu.unit-class-list > li > a > span, .chosendiv > span {
     padding-left: 3px;
+}
+#randomclosenumdiv, #randomfarnumdiv {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 #rulerandomdiv, #randomcostavgdiv {
 	flex-direction: row;
