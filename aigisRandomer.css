@@ -153,8 +153,10 @@ body{
     justify-content: space-around;
 	align-items: center;
 }
-#randomcostavgdiv .random-limit-min, #randomcostavgdiv .random-limit-max {
+#randomcostavgdiv input {
 	width: 45px;
+}
+.random-limit-min, .random-limit-max {
 	margin: 0 5px;
 }
 #rulerandomdiv .btn-group > * {

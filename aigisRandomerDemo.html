@@ -97,20 +97,20 @@
 		<div class="modal fade" id="randommodal" tabindex="-1" role="dialog" aria-labelledby="randommodallabel" aria-hidden="true">
             <div class="modal-dialog" style="width: 90%;">
                 <div class="modal-content">
-                    <div class="modal-body" style="display: none;">
-                        <h3><input type="checkbox" value="#rulechoosediv">从满足以下规则的单位中选择</h3>
+                    <div class="modal-body">
+                        <h3><input type="checkbox" id="rulechoosecheckbox" value="#rulechoosediv"><label for="rulechoosecheckbox">从满足以下规则的单位中选择</label></h3>
                     </div>
 					<div class="modal-body" id="rulechoosediv" style="display: none">
 						从满足以下规则的单位中选择
 					</div>
-                    <div class="modal-body" style="display: none;">
-                        <h3><input type="checkbox" value="#ruleremovediv">排除满足以下规则的单位</h3>
+                    <div class="modal-body">
+                        <h3><input type="checkbox" id="ruleremovecheckbox" value="#ruleremovediv"><label for="ruleremovecheckbox">排除满足以下规则的单位</label></h3>
                     </div>
 					<div class="modal-body" id="ruleremovediv" style="display: none">
 						排除满足以下规则的单位
 					</div>
                     <div class="modal-body">
-                        <h3><input type="checkbox" value="#rulerandomdiv" checked>队伍编成需要满足的条件</h3>
+                        <h3><input type="checkbox" id="rulerandomcheckbox" value="#rulerandomdiv" checked><label for="rulerandomcheckbox">队伍编成需要满足的条件</label></h3>
                     </div>
 					<div class="modal-body" id="rulerandomdiv" style="display: flex">
 						<div id="randomclosenumdiv">
