@@ -72,12 +72,12 @@ body{
     font-size: 18px; 
     font-weight: bold;
 }
-.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a, #footerdiv, #rulerandomdiv, #randomcostavgdiv {
+.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a, #footerdiv, #randomrulediv, #randomcostavgdiv {
     display: flex;
 }
-.oneunittitlediv > *, .oneunitdetaildiv > *, .buttondiv > *, #navidiv > *, #rulerandomdiv > * {
-    flex: none;
-}
+    .oneunittitlediv > *, .oneunitdetaildiv > *, .buttondiv > *, #navidiv > *, #randomrulediv > * {
+        flex: none;
+    }
 .chosendiv {
     align-self: center;
 }
@@ -144,27 +144,27 @@ body{
     padding-left: 3px;
 }
 #randomclosenumdiv, #randomfarnumdiv {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
-#rulerandomdiv, #randomcostavgdiv {
-	flex-direction: row;
+#randomrulediv, #randomcostavgdiv {
+    flex-direction: row;
     justify-content: space-around;
-	align-items: center;
+    align-items: center;
 }
 #randomcostavgdiv input {
-	width: 45px;
+    width: 45px;
 }
 .random-limit-min, .random-limit-max {
-	margin: 0 5px;
+    margin: 0 5px;
 }
-#rulerandomdiv .btn-group > * {
-	min-width: 50px;
-	width: 50px;
+#randomrulediv .btn-group > * {
+    min-width: 50px;
+    width: 50px;
 }
-#rulerandomdiv .btn-group li > a {
-	padding: 3px 15px;
+#randomrulediv .btn-group li > a {
+    padding: 3px 15px;
 }
 #footerdiv {
     z-index: 100;
