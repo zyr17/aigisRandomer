@@ -1,8 +1,7 @@
 ﻿
-var loadingpic = 'images/01c0c0aaf0b2648db5.png';
+var loadingPic = 'images/01c0c0aaf0b2648db5.png';
 
-//one unitlist block template
-var unitlisttemplate = `<div class="unitlistdiv">
+var unitListTemplate = `<div class="unitlistdiv">
     <div class="oneunitdiv" v-for="(oneunit, index) in unitdata" :key="oneunit.name + oneunit.id" :index="index" :style="'background: ' + (oneunit.selected ? '#AFA;' : 'rgba(0, 0, 0, 0)')">
         <div class="oneunittitlediv">
             <span v-text="oneunit.name"></span>
@@ -45,64 +44,121 @@ var unitlisttemplate = `<div class="unitlistdiv">
     </div>
 </div>`;
 
-//register unitlist Vue component
+var dropdownToggleTemplate = `<div>
+    <span class="buttontitle">{{ title }}</span>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span>{{ chosenindex == undefined ? texts[0] : texts[chosenindex] }}</span> <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+            <li v-for="(text, index) in texts"><a href="javascript:void(0)" :index="index" @click="liClick($event)">{{ text }}</a></li>
+        </ul>
+    </div>
+</div>`;
+
+var randomResultTemplate = `<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+    <div v-for="oneunit in unitdata" style="width: 15%; margin: 10px 2.5%">
+        <img style="width: 100%" :src="oneunit.classwithicon[oneunit.selectedclassid][1]" :title="oneunit.name">
+    </div>
+    <div v-if="unitdata == undefined || unitdata.length == 0" class="alert alert-danger">未能在10000次随机生成满足要求的随机结果！请检查随机条件是否存在矛盾，或者降低要求以增加随机成功率。</div>
+</div>`;
+
+var checkboxListTemplate = `<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+    <div v-for="(text, index) in texts" :style="' width: ' + 100.0 / texts.length + '%; margin: 10px 0px;'">
+        <div style="display: flex; justify-content: center;">
+            <input type="checkbox" :id="randomId[index]" :index="index" v-model="selects[index]">
+            <label :for="randomId[index]">{{ text }}</label>
+        </div>
+    </div>
+</div>`;
+
 Vue.component('unitlist', {
-    template: unitlisttemplate,
+    template: unitListTemplate,
     props: [ 'unitdata' ]
 });
 
+Vue.component('customdropdown', {
+    template: dropdownToggleTemplate,
+    props: [ 'texts', 'title', 'chosenindex' ],
+    methods: {
+        liClick: function(e) {
+            var a = e.currentTarget;
+            var index = parseInt($(a).attr('index'));
+            this.$emit('update:chosenindex', index);
+        }
+    }
+});
+
+Vue.component('randomresult', {
+    template: randomResultTemplate,
+    props: [ 'unitdata' ]
+});
+
+Vue.component('checkboxlist', {
+   template: checkboxListTemplate,
+   props: [ 'texts', 'selects' ],
+   data: function() {
+       var a = [];
+       for (var j = 0; j < this.texts.length; j ++ ){
+           var r = 'CheckboxRandomId';
+           for (var i = 0; i < 10; i ++ )
+               r += String.fromCharCode(65 + getRandomInt(0, 26));
+           a.push(r);
+       }
+       return {
+           randomId: a
+       };
+   }
+});
+
 //replace <unitlist> under el
-function addunitlist(el, data){
+function addUnitList(el, data){
     $(el).html(`<unitlist :unitdata="${ data }"></unitlist>`);
 }
 
 //click dropdown list event, update selectedclassid
-function dropdownliafunc(thisa, vue) {
+function dropdownLiAFunc(thisa, vueunitdata) {
     var oud = $($(thisa).parents('.oneunitdiv')[0]);
     var id = parseInt(oud.attr('index'));
-    for (var i = 0; i < vue.unitdata[id].classwithicon.length; i ++ )
-        if (vue.unitdata[id].classwithicon[i][0] == $(thisa).text())
-            vue.unitdata[id].selectedclassid = i;
-    unitdatacostupdate(vue.unitdata[id]);
-    unitdatachange(vue.unitdata[id]);
+    for (var i = 0; i < bodyVue[vueunitdata][id].classwithicon.length; i ++ )
+        if (bodyVue[vueunitdata][id].classwithicon[i][0] == $(thisa).text())
+            bodyVue[vueunitdata][id].selectedclassid = i;
+    unitDataCostUpdate(bodyVue[vueunitdata][id]);
+    unitDataChange(bodyVue[vueunitdata][id]);
 }
 
-var unitdata = []; //full unitdata array
-var showdata = []; //temp array for unitdatas that will show
-var unitlistvue; //unitlist Vue instance
-var randomresultimgvue; //random result Vue instance
+var unitData = []; //full unitdata array
+var badyVue; // root Vue instance
 
 //load unitlist.json
-function loaddataJSON(path){
+function loadDataJson(path){
     $.getJSON(path).done(function (data){
         for (var name in data){
-            if (data.rare == 7) console.log(data);
-            var i = unitdata.length;
-            unitdata[i] = {};
-            unitdata[i]['name'] = name;
-            unitdata[i]['id'] = 0;
+            //if (data.rare == 7) console.log(data);
+            var i = unitData.length;
+            unitData[i] = {};
+            unitData[i]['name'] = name;
+            unitData[i]['id'] = 0;
             for (var j in data[name])
-                unitdata[i][j] = data[name][j];
+                unitData[i][j] = data[name][j];
             //if (unitdata.length > 10) break;
         }
 
-        for (var i = 0; i < unitdata.length; i ++ ){
-            for (var j = 0; j < unitdata[i].classwithicon.length; j ++ ){
+        for (var i = 0; i < unitData.length; i ++ ){
+            for (var j = 0; j < unitData[i].classwithicon.length; j ++ ){
                 r = /^.*?image(\d+).*?([^\\\/]*)$/;
-                len = unitdata[i].classwithicon[j].length;
+                len = unitData[i].classwithicon[j].length;
                 if (len == 1)
-                    unitdata[i].classwithicon[j][1] = loadingpic;
-                imgsrc = unitdata[i].classwithicon[j][1];
+                    unitData[i].classwithicon[j][1] = loadingPic;
+                var imgsrc = unitData[i].classwithicon[j][1];
                 if (r.test(imgsrc))
-                    unitdata[i].classwithicon[j][1] = 'images/' + r.exec(imgsrc)[1] + r.exec(imgsrc)[2];
-                if (j > 0 && unitdata[i].classwithicon[j][1] == loadingpic)
-                    unitdata[i].classwithicon[j][1] = unitdata[i].classwithicon[j - 1][1];
+                    unitData[i].classwithicon[j][1] = 'images/' + r.exec(imgsrc)[1] + r.exec(imgsrc)[2];
+                if (j > 0 && unitData[i].classwithicon[j][1] == loadingPic)
+                    unitData[i].classwithicon[j][1] = unitData[i].classwithicon[j - 1][1];
             }
-            unitdata[i]['selectedclassid'] = 0;
-            unitdata[i]['selected'] = false;
-            unitdatacostupdate(unitdata[i]);
+            unitData[i]['selectedclassid'] = 0;
+            unitData[i]['selected'] = false;
+            unitDataCostUpdate(unitData[i]);
         }
-        loadlocaldata();
+        loadLocalData();
         console.log('data load ok');
         $('#initbutton').text('载入完成，点击进入');
         $('#initbutton').attr('disabled', false);
@@ -112,7 +168,7 @@ function loaddataJSON(path){
 }
 
 //update cost array when unitdata.selectedclassid updated
-function unitdatacostupdate(data) {
+function unitDataCostUpdate(data) {
     var selectid = data.selectedclassid;
     data['cost'] = [];
     if (selectid != undefined && data.classwithicon.length > selectid && data.status[data.classwithicon[selectid][0]] != undefined){
@@ -127,52 +183,51 @@ function unitdatacostupdate(data) {
 }
 
 //load saved data in localStorage
-function loadlocaldata() {
-    var nowlength = unitdata.length;
+function loadLocalData() {
+    var nowlength = unitData.length;
     for (var i = 0; i < nowlength; i ++ ){
-        if (localStorage[unitdata[i].name] != undefined){
-            console.log('get data', unitdata[i].name);
-            var localdata = JSON.parse(localStorage[unitdata[i].name]);
+        if (localStorage[unitData[i].name] != undefined){
+            console.log('get data', unitData[i].name);
+            var localdata = JSON.parse(localStorage[unitData[i].name]);
             for (var j = 0; j < localdata.length; j ++ )
                 if (localdata[j].id == 0){
-                    unitdata[i].selected = true;
-                    unitdata[i].selectedclassid = localdata[j].classid == undefined ? 0 : localdata[j].classid;
-                    unitdatacostupdate(unitdata[i]);
+                    unitData[i].selected = true;
+                    unitData[i].selectedclassid = localdata[j].classid == undefined ? 0 : localdata[j].classid;
+                    unitDataCostUpdate(unitData[i]);
                     if (localdata[j].cost != undefined)
-                        unitdata[i].selectedcost = localdata[j].cost;
+                        unitData[i].selectedcost = localdata[j].cost;
                 }
             //TODO 复制人数据加载
         }
     }
 }
 
-//load new unitdata to vue.unitdata and bind events, run mounted when done.
-function unitdataload(el, vue, unitdata, mounted = () => {} ) {
-    vue.unitdata = unitdata;
-    vue.$nextTick(function () {
-        $(el + ' .dropdownli a').click(function () { dropdownliafunc(this, vue); });
+//load new unitdata to bodyVue.unitdata and bind events, run mounted when done.
+function unitDataLoad(el, vueunitdata, unitdata, mounted = () => {} ) {
+    bodyVue[vueunitdata] = unitdata;
+    bodyVue.$nextTick(function () {
+        $(el + ' .dropdownli a').click(function () { dropdownLiAFunc(this, vueunitdata); });
         $(el + ' .wheel-button').wheelmenu({ animation: "fade", animationSpeed: "fast", angle: "all", trigger: "hover" });
         $(el + ' .wheel li a').click(function () {
             var id = $($(this).parents('.oneunitdiv')[0]).attr('index');
-            vue.unitdata[id].selectedcost = $(this).text();
-            unitdatachange(vue.unitdata[id]);
+            bodyVue[vueunitdata][id].selectedcost = $(this).text();
+            unitDataChange(bodyVue[vueunitdata][id]);
         });
         $(el + ' .wheel').click(function () {
             $(this).mouseleave();
         });
         $(el + ' .oneunittitlediv, ' + el + ' .chosendiv').click(function () {
             var id = $($(this).parents('.oneunitdiv')[0]).attr('index');
-            vue.unitdata[id].selected = !vue.unitdata[id].selected;
-            unitdatachange(vue.unitdata[id]);
+            bodyVue[vueunitdata][id].selected = !bodyVue[vueunitdata][id].selected;
+            unitDataChange(bodyVue[vueunitdata][id]);
         });
-        changeunitclasslistwidth();
+        changeUnitClassListWidth();
         mounted();
     });
-    return vue;
 }
 
 //when unitdata change, update it into localStorage
-function unitdatachange(oneunit) {
+function unitDataChange(oneunit) {
     if (localStorage[oneunit.name] != undefined && !oneunit.selected){
         var localdata = JSON.parse(localStorage[oneunit.name]);
         for (var i = 0; i < localdata.length; i ++ )
@@ -206,8 +261,8 @@ function unitdatachange(oneunit) {
 }
 
 //compare function for sort
-function unitsortcompare(a, b) {
-    var chosen = $('#navidiv #sortdiv button .navichosen').text();
+function unitSortCompare(a, b) {
+    var chosen = bodyVue.navi.sortArray[bodyVue.navi.sortSelected]
     if (chosen == '名称') return a.name.localeCompare(b.name);
     if (chosen == '稀有度'){
         if (a.rare > b.rare) return -1;
@@ -229,137 +284,162 @@ function unitsortcompare(a, b) {
 
 
 //[min, max)
-function getrandomint(min, max) {
+function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+var rareToNumber = { '蓝': 7, '黑': 6, '白': 5, '金': 4, '银': 3, '铜': 2, '铁': 1 };
 
 //check one unitdata whether pass navi filter
-function checkoneunitnavi(unit) {
-    var chosen = $('#navidiv #rarediv button .navichosen').text();
-    if (chosen == '蓝' && unit.rare != 7) return false;
-    if (chosen == '黑' && unit.rare != 6) return false;
-    if (chosen == '白' && unit.rare != 5) return false;
-    if (chosen == '金' && unit.rare != 4) return false;
-    if (chosen == '银' && unit.rare != 3) return false;
-    if (chosen == '铜' && unit.rare != 2) return false;
-    if (chosen == '铁' && unit.rare != 1) return false;
-    chosen = $('#navidiv #positiondiv button .navichosen').text();
+function checkOneUnitNavi(unit) {
+    var chosen = bodyVue.navi.rareArray[bodyVue.navi.rareSelected];
+    if (rareToNumber[chosen] != undefined && unit.rare != rareToNumber[chosen]) return false;
+    chosen = bodyVue.navi.positionArray[bodyVue.navi.positionSelected];
     if (chosen == '近战' && unit.position != 'close') return false;
     if (chosen == '远程' && unit.position != 'far') return false;
-    chosen = $('#navidiv #chosendiv button .navichosen').text();
+    chosen = bodyVue.navi.chosenArray[bodyVue.navi.chosenSelected];
     if (chosen == '已选' && !unit.selected) return false;
     if (chosen == '未选' && unit.selected) return false;
-    chosen = $('#navidiv #costdiv button .navichosen').text();
+    chosen = bodyVue.navi.costArray[bodyVue.navi.costSelected];
+    if (chosen == undefined) chosen = '';
     if (chosen[0] == '低' && (unit.selectedcost == '?' || unit.selectedcost > 15)) return false;
     if (chosen[0] == '中' && (unit.selectedcost == '?' || unit.selectedcost < 16 || unit.selectedcost > 25)) return false;
     if (chosen[0] == '高' && unit.selectedcost != '?' && unit.selectedcost < 26) return false;
-    chosen = $('#navidiv #searchdiv #searchinput').val();
+    chosen = bodyVue.navi.searchText;
     if (RegExp(chosen).exec(unit.name) == undefined) return false;
     return true;
 }
 
 //check one unitdata whether pass random filter
-function checkoneunitrandom(unit) {
-	if (!unit.selected) return false;
-	return true;
+function checkOneUnitRandom(unit) {
+    if (!unit.selected) return false;
+    return true;
+}
+
+//if include rule contains this unit, return true
+function includeCheck(unit) {
+    if (!bodyVue.random.include.enabled) return true;
+    if (!bodyVue.random.include.rareSelected[unit.rare - 1]) return false;
+    if (unit.position == 'close' && !bodyVue.random.include.positionSelected[0]) return false;
+    if (unit.position == 'far' && !bodyVue.random.include.positionSelected[1]) return false;
+    return true;
+}
+
+//if exclude rule contains this unit, return true (not a legal unit)
+function excludeCheck(unit) {
+    if (!bodyVue.random.exclude.enabled) return false;
+    if (bodyVue.random.exclude.rareSelected[unit.rare - 1]) return true;
+    if (unit.position == 'close' && bodyVue.random.exclude.positionSelected[0]) return true;
+    if (unit.position == 'far' && bodyVue.random.exclude.positionSelected[1]) return true;
+    return false;
+}
+
+// use random.include/exclude to find all legal units
+function getLegalUnits(inunitlist) {
+    var res = [];
+    for (var unit in inunitlist)
+        if (includeCheck(inunitlist[unit]) && !excludeCheck(inunitlist[unit]))
+            res.push(inunitlist[unit]);
+    return res;
 }
 
 //use units in unitlist and generate unitlist pass random filter
-function makelegalunitlist(inunitlist, number = 15) {
-	var unitlist = [].concat(inunitlist);
-	for (var randomcount = 0; randomcount < 10000; randomcount ++ ){
-		var nowres = [];
-		for (var j = 0; j < number; j ++ ){
-			var rndpos = getrandomint(j, unitlist.length);
-			var tmp = unitlist[j];
-			unitlist[j] = unitlist[rndpos];
-			unitlist[rndpos] = tmp;
-			nowres.push(unitlist[j]);
-		}
-		var closenum = 0, totcost = 0, costnum = 0;
-		for (var i in nowres){
-			if (nowres[i].position == 'close') closenum ++ ;
-			if (!isNaN(parseInt(nowres[i].selectedcost))){
-				costnum ++ ;
-				totcost += parseInt(nowres[i].selectedcost);
-			}
-		}
-		var farnum = number - closenum;
-		var chosen = $('#randommodal #randomclosenumdiv .random-limit-min button .randomchosen').text();
-		var closemin = parseInt(chosen);
-		chosen = $('#randommodal #randomclosenumdiv .random-limit-max button .randomchosen').text();
-		var closemax = parseInt(chosen);
-		chosen = $('#randommodal #randomfarnumdiv .random-limit-min button .randomchosen').text();
-		var farmin = parseInt(chosen);
-		chosen = $('#randommodal #randomfarnumdiv .random-limit-max button .randomchosen').text();
-		var farmax = parseInt(chosen);
-		chosen = $('#randommodal #randomcostavgdiv .random-limit-min').val();
-		var costavgmin = parseInt(chosen);
-		chosen = $('#randommodal #randomcostavgdiv .random-limit-max').val();
-		var costavgmax = parseInt(chosen);
-		//console.log(closenum, farnum, totcost, costnum, closemin, closemax, farmin, farmax, costavgmin, costavgmax);
-		if (closenum < closemin || closenum > closemax) continue;
-		if (farnum < farmin || farnum > farmax) continue;
-		totcost /= 1.0 * costnum;
-		if (totcost < costavgmin || totcost > costavgmax) continue;
-		return nowres;
-	}
-	return undefined;
+function makeLegalUnitList(inunitlist, number = 15) {
+    var unitlist = getLegalUnits(inunitlist);
+    for (var randomcount = 0; randomcount < 10000; randomcount ++ ){
+        var nowres = [];
+        for (var j = 0; j < number; j ++ ){
+            var rndpos = getRandomInt(j, unitlist.length);
+            var tmp = unitlist[j];
+            unitlist[j] = unitlist[rndpos];
+            unitlist[rndpos] = tmp;
+            nowres.push(unitlist[j]);
+        }
+        var closenum = 0, totcost = 0, costnum = 0;
+        for (var i in nowres){
+            if (nowres[i].position == 'close') closenum ++ ;
+            if (!isNaN(parseInt(nowres[i].selectedcost))){
+                costnum ++ ;
+                totcost += parseInt(nowres[i].selectedcost);
+            }
+        }
+        var farnum = number - closenum;
+        var chosen = bodyVue.random.rule.closeNumber.min;
+        var closemin = parseInt(chosen);
+        chosen = bodyVue.random.rule.closeNumber.max;
+        var closemax = parseInt(chosen);
+        chosen = bodyVue.random.rule.farNumber.min;
+        var farmin = parseInt(chosen);
+        chosen = bodyVue.random.rule.farNumber.max;
+        var farmax = parseInt(chosen);
+        chosen = bodyVue.random.rule.averageCost.min;
+        var costavgmin = parseInt(chosen);
+        chosen = bodyVue.random.rule.averageCost.max;
+        var costavgmax = parseInt(chosen);
+        //console.log(closenum, farnum, totcost, costnum, closemin, closemax, farmin, farmax, costavgmin, costavgmax);
+        if (closenum < closemin || closenum > closemax) continue;
+        if (farnum < farmin || farnum > farmax) continue;
+        totcost /= 1.0 * costnum;
+        if (totcost < costavgmin || totcost > costavgmax) continue;
+        return nowres;
+    }
+    return undefined;
 }
 
 //generate new unitlist use filter and order. if israndom15, randomly choose at most 15 unit and sort
-function generateunitlist() {
-    showdata = [];
-    for (var i = 0; i < unitdata.length; i ++ )
-        if (checkoneunitnavi(unitdata[i]))
-            showdata.push(unitdata[i]);
-    showdata = showdata.sort(unitsortcompare);
-    return showdata;
+function generateUnitList() {
+    var showData = [];
+    for (var i = 0; i < unitData.length; i ++ )
+        if (checkOneUnitNavi(unitData[i]))
+            showData.push(unitData[i]);
+    showData = showData.sort(unitSortCompare);
+    return showData;
 }
 
 //generate random unitlist
-function generaterandomunitlist() {
-    showdata = [];
-    for (var i = 0; i < unitdata.length; i ++ )
-        if (checkoneunitrandom(unitdata[i]))
-            showdata.push(unitdata[i]);
-    showdata = makelegalunitlist(showdata);
-    return showdata;
+function generateRandomUnitList() {
+    var showData = [];
+    for (var i = 0; i < unitData.length; i ++ )
+        if (checkOneUnitRandom(unitData[i]))
+            showData.push(unitData[i]);
+    showData = makeLegalUnitList(showData);
+    return showData;
 }
 
-function randomunitlistupdate(vue, el) {
-	var res = generaterandomunitlist();
-	vue.unitdata = res;
-	if (res.length == 0) return false;
-	return true;
+function randomUnitListUpdate(vueunitdata) {
+    var res = generateRandomUnitList();
+    bodyVue[vueunitdata] = res;
+    if (res == undefined || res.length == 0) return false;
+    return true;
 }
 
 //update unitlist with filter, make animation
-var unitlistupdating = false;
-function unitlistupdate(vue, el) {
-    if (unitlistupdating) return;
-    unitlistupdating = true;
+var unitlListUpdating = false;
+function unitListUpdate(el) {
+    if (unitlListUpdating) return;
+    unitlListUpdating = true;
     $('html,body').animate({ scrollTop: 0 }, 333);
     $('#unitlistdiv').animate({ opacity: '0' }, 333, function () {
-        showdata = generateunitlist();
+        bodyVue.showwelcome = false;
+        var showData = generateUnitList();
+        /*
         if (vue == undefined){
-            addunitlist(el, 'unitdata');
+            addUnitList(el, 'unitdata');
             vue = new Vue({ el: el, data: { unitdata: [] } });
         }
-        unitdataload(el, vue, showdata, () => {
-            $(el).animate({ opacity: '0' }, showdata.length * 2);
-            $(el).animate({ opacity: '1' }, 500);
+        */
+        unitDataLoad(el, 'unitlistunitdata', showData, () => {
+            $(el).animate({ opacity: '0' }, showData.length * 2);
+            $(el).animate({ opacity: '1' }, 333);
         });
-        unitlistupdating = false;
+        unitlListUpdating = false;
     });
-    return vue;
 }
 
 //adjust .unit-class-list width
-function changeunitclasslistwidth(){
+function changeUnitClassListWidth(){
     $('.unit-class-list').css('width', $('.chosendiv').css('width'));
 }
 
 //adjust .unit-class-list width when window size changed
-$(document).ready(function () {$(window).resize(changeunitclasslistwidth);});
+$(document).ready(function () {$(window).resize(changeUnitClassListWidth);});

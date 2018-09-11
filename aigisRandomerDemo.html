@@ -15,373 +15,297 @@
         <link rel="stylesheet" href="aigisRandomer.css">
     </head>
     <body>
-    <div>
-        <div id="navidiv">
-            <div id="rarediv">
-                <span class="buttontitle">稀有度</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">蓝</a></li>
-                        <li><a href="javascript:void(0)">黑</a></li>
-                        <li><a href="javascript:void(0)">白</a></li>
-                        <li><a href="javascript:void(0)">金</a></li>
-                        <li><a href="javascript:void(0)">银</a></li>
-                        <li><a href="javascript:void(0)">铜</a></li>
-                        <li><a href="javascript:void(0)">铁</a></li>
-                    </ul>
+        <div id="bodydiv">
+            <div id="navidiv">
+                <div id="rarediv">
+                    <customdropdown title="稀有度" :chosenindex.sync="navi.rareSelected" :texts="navi.rareArray"></customdropdown>
                 </div>
-            </div>
-            <div id="positiondiv">
-                <span class="buttontitle">位置</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">近战</a></li>
-                        <li><a href="javascript:void(0)">远程</a></li>
-                    </ul>
+                <div id="positiondiv">
+                    <customdropdown title="位置" :chosenindex.sync="navi.positionSelected" :texts="navi.positionArray"></customdropdown>
                 </div>
-            </div>
-            <div id="chosendiv">
-                <span class="buttontitle">已选</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">未选</a></li>
-                        <li><a href="javascript:void(0)">已选</a></li>
-                    </ul>
+                <div id="chosendiv">
+                    <customdropdown title="已选" :chosenindex.sync="navi.chosenSelected" :texts="navi.chosenArray"></customdropdown>
                 </div>
-            </div>
-            <div id="costdiv">
-                <span class="buttontitle">COST</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">全部</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">全部</a></li>
-                        <li><a href="javascript:void(0)">低(0-15)</a></li>
-                        <li><a href="javascript:void(0)">中(16-25)</a></li>
-                        <li><a href="javascript:void(0)">高(26-?)</a></li>
-                    </ul>
+                <div id="costdiv">
+                    <customdropdown title="COST" :chosenindex.sync="navi.costSelected" :texts="navi.costArray"></customdropdown>
                 </div>
-            </div>
-            <div id="sortdiv">
-                <span class="buttontitle">排序方式</span>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="navichosen">名称</span> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="javascript:void(0)">名称</a></li>
-                        <li><a href="javascript:void(0)">稀有度</a></li>
-                        <li><a href="javascript:void(0)">职业</a></li>
-                        <li><a href="javascript:void(0)">COST</a></li>
-                    </ul>
+                <div id="sortdiv">
+                    <customdropdown title="排序方式" :chosenindex.sync="navi.sortSelected" :texts="navi.sortArray"></customdropdown>
                 </div>
-            </div>
-            <div id="searchdiv" class="input-group">
-                <input type="text" id="searchinput" class="form-control">
-                <span class="input-group-btn">
-                    <button id="searchbutton" class="btn btn-default" type="button">搜索</button>
-                </span>
-            </div>
-        </div>
-        <div id="navipadding"></div>
-        <div id="unitlistdiv">
-            <div style="display: flex; flex-direction: column;">
-                <div style="display: flex; justify-content: center; flex: none;">
-                    <span style="margin: 10px; flex: none; font-size: 30px; font-weight: bold;">
-                        数据载入中...(实际上应该是使用说明)
+                <div id="searchdiv" class="input-group">
+                    <input type="text" id="searchinput" class="form-control" v-model="navi.searchText">
+                    <span class="input-group-btn">
+                        <button id="searchbutton" class="btn btn-default" type="button">搜索</button>
                     </span>
                 </div>
-                <div style="flex: none; display: flex; justify-content: center;">
-                    <span style="flex: none;">
-                        <input id="notwelcome" type="checkbox"/>自动跳过
-                    </span>
-                    <button id="initbutton" type="button" disabled>数据载入中...</button>
-                </div>
             </div>
-        </div>
-        <div id="footerdiv">
-            <button type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#randommodal">随机</button>
-            <button type="button" class="btn btn-default" id="savedata" href="javascript:void(0)" data-toggle="modal" data-target="#savemodal">保存</button>
-            <button type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#loadmodal">加载</button>
-        </div>
-        <div id="footerpadding"></div>
-        <div class="modal fade" id="savemodal" tabindex="-1" role="dialog" aria-labelledby="savemodallabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="savemodallabel">请保存下面的数据</h4>
+            <div id="navipadding"></div>
+            <div id="unitlistdiv">
+                <div v-if="showwelcome" style="display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: center; flex: none;">
+                        <span style="margin: 10px; flex: none; font-size: 30px; font-weight: bold;">
+                            数据载入中...(实际上应该是使用说明)
+                        </span>
                     </div>
-                    <div class="modal-body">
-                        <textarea id="savemodaltextarea" readonly="readonly" onclick="this.focus();this.select();"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <div style="flex: none; display: flex; justify-content: center;">
+                        <span style="flex: none;">
+                            <input id="notwelcome" type="checkbox">自动跳过
+                        </span>
+                        <button id="initbutton" type="button" disabled>数据载入中...</button>
                     </div>
                 </div>
+                <unitlist ref="unitlist" v-if="!showwelcome" :unitdata="unitlistunitdata"></unitlist>
             </div>
-        </div>
-        <div class="modal fade" id="loadmodal" tabindex="-1" role="dialog" aria-labelledby="loadmodallabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="loadmodallabel">请填入保存的数据</h4>
-                    </div>
-                    <div class="modal-body">
-                        <textarea id="loadmodaltextarea"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button id="loadmodalbutton" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+            <div id="footerdiv">
+                <button type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#randommodal">随机</button>
+                <button type="button" class="btn btn-default" id="savedata" href="javascript:void(0)" data-toggle="modal" data-target="#savemodal">保存</button>
+                <button type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#loadmodal">加载</button>
+            </div>
+            <div id="footerpadding"></div>
+            <div class="modal fade" id="savemodal" tabindex="-1" role="dialog" aria-labelledby="savemodallabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="savemodallabel">请保存下面的数据</h4>
+                        </div>
+                        <div class="modal-body">
+                            <textarea id="savemodaltextarea" readonly="readonly" onclick="this.focus();this.select();"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-		<div class="modal fade" id="randommodal" tabindex="-1" role="dialog" aria-labelledby="randommodallabel" aria-hidden="true">
-            <div class="modal-dialog" style="width: 90%;">
-                <div class="modal-content">
-                    <div class="modal-body" style="display: none;">
-                        <h3><input type="checkbox" value="#rulechoosediv">从满足以下规则的单位中选择</h3>
+            <div class="modal fade" id="loadmodal" tabindex="-1" role="dialog" aria-labelledby="loadmodallabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="loadmodallabel">请填入保存的数据</h4>
+                        </div>
+                        <div class="modal-body">
+                            <textarea id="loadmodaltextarea"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button id="loadmodalbutton" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                        </div>
                     </div>
-					<div class="modal-body" id="rulechoosediv" style="display: none">
-						从满足以下规则的单位中选择
-					</div>
-                    <div class="modal-body" style="display: none;">
-                        <h3><input type="checkbox" value="#ruleremovediv">排除满足以下规则的单位</h3>
+                </div>
+            </div>
+            <div class="modal fade" id="randommodal" tabindex="-1" role="dialog" aria-labelledby="randommodallabel" aria-hidden="true">
+                <div class="modal-dialog" style="width: 90%;">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h3><input type="checkbox" id="randomincludecheckbox" value="#randomincludediv" v-model="random.include.enabled"><label for="randomincludecheckbox">从满足以下规则的单位中选择</label></h3>
+                        </div>
+                        <div class="modal-body" id="randomincludediv">
+                            <checkboxlist :texts="random.include.rareArray" :selects.sync="random.include.rareSelected"></checkboxlist>
+                            <checkboxlist :texts="random.include.positionArray" :selects.sync="random.include.positionSelected"></checkboxlist>
+                        </div>
+                        <div class="modal-body">
+                            <h3><input type="checkbox" id="randomexcludecheckbox" value="#randomexcludediv" v-model="random.exclude.enabled"><label for="randomexcludecheckbox">排除满足以下规则的单位</label></h3>
+                        </div>
+                        <div class="modal-body" id="randomexcludediv">
+                            <checkboxlist :texts="random.exclude.rareArray" :selects.sync="random.exclude.rareSelected"></checkboxlist>
+                            <checkboxlist :texts="random.exclude.positionArray" :selects.sync="random.exclude.positionSelected"></checkboxlist>
+                        </div>
+                        <div class="modal-body">
+                            <h3><input type="checkbox" id="randomrulecheckbox" value="#randomrulediv" v-model="random.rule.enabled"><label for="randomrulecheckbox">队伍编成需要满足的条件</label></h3>
+                        </div>
+                        <div class="modal-body" id="randomrulediv" style="display: flex">
+                            <div id="randomclosenumdiv">
+                                <customdropdown title="近战数量：最少" :chosenindex.sync="random.rule.closeNumber.min" :texts="zeroToFifteen"></customdropdown>
+                                <customdropdown title="最多" :chosenindex.sync="random.rule.closeNumber.max" :texts="zeroToFifteen"></customdropdown>
+                            </div>
+                            <div id="randomfarnumdiv">
+                                <customdropdown title="远程数量：最少" :chosenindex.sync="random.rule.farNumber.min" :texts="zeroToFifteen"></customdropdown>
+                                <customdropdown title="最多" :chosenindex.sync="random.rule.farNumber.max" :texts="zeroToFifteen"></customdropdown>
+                            </div>
+                            <div id="randomcostavgdiv">
+                                <span>平均COST：最低 </span>
+                                <input type="text" class="form-control random-limit-min" id="randommincostinput" v-model="random.rule.averageCost.min">
+                                <span> 最高 </span>
+                                <input type="text" class="form-control random-limit-max" id="randommaxcostinput" v-model="random.rule.averageCost.max">
+                            </div>
+                        </div>
+                        <div class="modal-body" style="display: none;">
+                            <h3><input type="checkbox" value="#rulegroupdiv">选择预编队伍概率</h3>
+                        </div>
+                        <div class="modal-body" id="rulegroupdiv" style="display: none">
+                            选择预编队伍概率
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button id="randommodalresultbutton" type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#randomresultmodal">随机</button>
+                        </div>
                     </div>
-					<div class="modal-body" id="ruleremovediv" style="display: none">
-						排除满足以下规则的单位
-					</div>
-                    <div class="modal-body">
-                        <h3><input type="checkbox" value="#rulerandomdiv" checked>队伍编成需要满足的条件</h3>
-                    </div>
-					<div class="modal-body" id="rulerandomdiv" style="display: flex">
-						<div id="randomclosenumdiv">
-							<span class="buttontitle">近战数量：最少</span>
-							<div class="btn-group random-limit-min">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">0</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
-							<span class="buttontitle">最多</span>
-							<div class="btn-group random-limit-max">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">10</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
-						</div>
-						<div id="randomfarnumdiv">
-							<span class="buttontitle">远程数量：最少</span>
-							<div class="btn-group random-limit-min">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">0</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
-							<span class="buttontitle">最多</span>
-							<div class="btn-group random-limit-max">
-								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="randomchosen">10</span> <span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:void(0)">0</a></li>
-									<li><a href="javascript:void(0)">1</a></li>
-									<li><a href="javascript:void(0)">2</a></li>
-									<li><a href="javascript:void(0)">3</a></li>
-									<li><a href="javascript:void(0)">4</a></li>
-									<li><a href="javascript:void(0)">5</a></li>
-									<li><a href="javascript:void(0)">6</a></li>
-									<li><a href="javascript:void(0)">7</a></li>
-									<li><a href="javascript:void(0)">8</a></li>
-									<li><a href="javascript:void(0)">9</a></li>
-									<li><a href="javascript:void(0)">10</a></li>
-									<li><a href="javascript:void(0)">11</a></li>
-									<li><a href="javascript:void(0)">12</a></li>
-									<li><a href="javascript:void(0)">13</a></li>
-									<li><a href="javascript:void(0)">14</a></li>
-									<li><a href="javascript:void(0)">15</a></li>
-								</ul>
-							</div>
-						</div>
-						<div id="randomcostavgdiv">
-							<span>平均COST：最低 </span>
-							<input type="text" class="form-control random-limit-min" id="randommincostinput" value="12">
-							<span> 最高 </span>
-							<input type="text" class="form-control random-limit-max" id="randommaxcostinput" value="22">
-						</div>
-					</div>
-                    <div class="modal-body" style="display: none;">
-                        <h3><input type="checkbox" value="#rulegroupdiv">选择预编队伍概率</h3>
-                    </div>
-					<div class="modal-body" id="rulegroupdiv" style="display: none">
-						选择预编队伍概率
-					</div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button id="randommodalresultbutton" type="button" class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#randomresultmodal">随机</button>
+                </div>
+            </div>
+            <div class="modal fade" id="randomresultmodal" tabindex="-1" role="dialog" aria-labelledby="randomresultmodallabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="randomresultmodallabel">随机结果</h4>
+                        </div>
+                        <div class="modal-body">
+                            <randomresult :unitdata="randomresultunitdata"></randomresult>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-		<div class="modal fade" id="randomresultmodal" tabindex="-1" role="dialog" aria-labelledby="randomresultmodallabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="randomresultmodallabel">随机结果</h4>
-                    </div>
-                    <div class="modal-body">
-						<div id="randomresultimgdiv" style="display: flex; flex-direction: row; flex-wrap: wrap;">
-							<div v-for="oneunit in unitdata" style="width: 15%; margin: 10px 2.5%">
-								<img style="width: 100%" :src="oneunit.classwithicon[oneunit.selectedclassid][1]" :title="oneunit.name">
-							</div>
-							<div v-if="unitdata == undefined || unitdata.length == 0" class="alert alert-danger">未能在指定次数生成满足要求的随机结果！请检查随机条件是否存在矛盾，或者降低要求以增加随机成功率。</div>
-						</div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-	</div>
-    </body>
-    <script>
+        <script>
 
-		$('#randommodal .modal-body > h3 > input').click(function () {
-			var divid = $(this).attr('value');
-			if ($(this).prop('checked'))
-				$(divid).css('display', '');
-			else $(divid).css('display', 'none');
-		});
-		
-		$('#randommodalresultbutton').click(function () {
-			if (!randomunitlistupdate(randomresultimgvue, '#randomresultimgdiv')){
-				// random failed
-			}
-		});
-	
-		//when scroll, close all wheel menu
-        $(window).scroll(function () {
-            $('.wheel.active').mouseleave();
-        });
-
-        //show unitlist
-        $('#initbutton').click(function () {
-            unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
-        });
-
-        //save not welcome flag in localstorage
-        $('#notwelcome').click(function () {
-            if ($(this).prop('checked'))
-                localStorage['notwelcome'] = 'true';
-            else
-                localStorage.removeItem('notwelcome');
-        });
-        
-        //get notwelcome flag
-        if (localStorage.notwelcome != undefined){
-            $('#notwelcome').prop('checked', true);
-        }
-
-        //change selected when navi dropdown clicked
-        $('#navidiv ul.dropdown-menu li a').click(function () {
-            $(this).parents('.btn-group').find('button .navichosen').text($(this).text());
-        });
-		
-        //change selected when random dropdown clicked
-        $('#randommodal ul.dropdown-menu li a').click(function () {
-            $(this).parents('.btn-group').find('button .randomchosen').text($(this).text());
-        });
-
-        //change selected specially for #costdiv
-        $('#navidiv #costdiv ul li a').click(function () {
-            $(this).parents('.btn-group').find('button .navichosen').text($(this).text() != '全部' ? $(this).text()[0] : '全部');
-        });
-
-        //update unitlist
-        $('#searchbutton').click(function () {
-            unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
-        });
-
-        $('#footer .wheel-button').wheelmenu({ animation: "fade", animationSpeed: "fast", trigger: "hover" });
-        
-        //savedata button, set save textarea texts
-        $('button#savedata').click(function () {
-            $('#savemodaltextarea').val(JSON.stringify(localStorage));
-        });
-
-        //loaddata button
-        $('#loadmodalbutton').click(function () {
-            try{
-                var data = JSON.parse($('#loadmodaltextarea').val());
-                if (Object.keys(data).length == 0){
-                    alert('空数据！不载了！');
-                    return;
+            bodyVue = new Vue({
+                el: '#bodydiv',
+                data: {
+                    zeroToFifteen: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                    navi: {
+                        rareArray: ['全部', '蓝', '黑', '白', '金', '银', '铜', '铁'],
+                        positionArray: ['全部', '近战', '远程'],
+                        chosenArray: ['全部', '已选', '未选'],
+                        costArray: ['全部', '低(0-15)', '中(16-25)', '高(26-?)'],
+                        sortArray: ['默认', '稀有度', '职业', 'COST'],
+                        rareSelected: undefined,
+                        positionSelected: undefined,
+                        chosenSelected: undefined,
+                        costSelected: undefined,
+                        sortSelected: undefined,
+                        searchText: ''
+                    },
+                    random: {
+                        include: {
+                            enabled: true,
+                            rareArray: ['铁', '铜', '银', '金', '白', '黑', '蓝'],
+                            rareSelected: [true, true, true, true, true, true, true],
+                            positionArray: ['近战', '远程'],
+                            positionSelected: [true, true]
+                        },
+                        exclude: {
+                            enabled: true,
+                            rareArray: ['铁', '铜', '银', '金', '白', '黑', '蓝'],
+                            rareSelected: [false, false, false, false, false, false, false],
+                            positionArray: ['近战', '远程'],
+                            positionSelected: [false, false]
+                        },
+                        rule: {
+                            enabled: true,
+                            closeNumber: {
+                                min: 0,
+                                max: 10
+                            },
+                            farNumber: {
+                                min: 0,
+                                max: 10
+                            },
+                            averageCost: {
+                                min: 12,
+                                max: 22
+                            }
+                        }
+                    },
+                    unitlistunitdata: [],
+                    randomresultunitdata: [],
+                    showwelcome: true
                 }
-                localStorage.clear();
-                for (var i in data)
-                    localStorage[i] = data[i];
-                alert('导入成功！为更新数据将刷新网页！');
-                location.reload();
+            });
+
+            //show/hide div when click title in random-modal
+            $('#randommodal .modal-body > h3 > input').click(function () {
+                var divid = $(this).attr('value');
+                if ($(this).prop('checked'))
+                    $(divid).css('display', '');
+                else $(divid).css('display', 'none');
+            });
+
+            // start random
+            $('#randommodalresultbutton').click(function () {
+                if (!randomUnitListUpdate('randomresultunitdata')) {
+                    // random failed
+                }
+            });
+
+            //when scroll, close all wheel menu
+            $(window).scroll(function () {
+                $('.wheel.active').mouseleave();
+            });
+
+            //show unitlist
+            $('#initbutton').click(function () {
+                unitListUpdate('#unitlistdiv');
+            });
+
+            //save not welcome flag in localstorage
+            $('#notwelcome').click(function () {
+                if ($(this).prop('checked'))
+                    localStorage['notwelcome'] = 'true';
+                else
+                    localStorage.removeItem('notwelcome');
+            });
+
+            //get notwelcome flag
+            if (localStorage.notwelcome != undefined) {
+                $('#notwelcome').prop('checked', true);
             }
-            catch(err){
-                alert('载入错误！可在控制台查看错误信息。');
-                console.log(err);
-            }
-        });
-		
-		randomresultimgvue = new Vue({el: '#randomresultimgdiv', data: { unitdata: [] }});
-        
-        loaddataJSON('unitdata.json');
-    </script>
+            /*
+                    //change selected when navi dropdown clicked
+                    $('#navidiv ul.dropdown-menu li a').click(function () {
+                        $(this).parents('.btn-group').find('button .navichosen').text($(this).text());
+                    });
+
+                    //change selected when random dropdown clicked
+                    $('#randommodal ul.dropdown-menu li a').click(function () {
+                        $(this).parents('.btn-group').find('button .randomchosen').text($(this).text());
+                    });
+            */
+            //change selected specially for #costdiv
+            $('#navidiv #costdiv ul li a').click(function () {
+                $(this).parents('.btn-group').find('button span:not(.caret)').text($(this).text() != '全部' ? $(this).text()[0] : '全部');
+            });
+
+            //update unitlist
+            $('#searchbutton').click(function () {
+                //unitlistvue = unitlistupdate(unitlistvue, '#unitlistdiv');
+                unitListUpdate('#unitlistdiv');
+            });
+
+            $('#footer .wheel-button').wheelmenu({ animation: "fade", animationSpeed: "fast", trigger: "hover" });
+
+            //savedata button, set save textarea texts
+            $('button#savedata').click(function () {
+                $('#savemodaltextarea').val(JSON.stringify(localStorage));
+            });
+
+            //loaddata button
+            $('#loadmodalbutton').click(function () {
+                try {
+                    var data = JSON.parse($('#loadmodaltextarea').val());
+                    if (Object.keys(data).length == 0) {
+                        alert('空数据！不载了！');
+                        return;
+                    }
+                    localStorage.clear();
+                    for (var i in data)
+                        localStorage[i] = data[i];
+                    alert('导入成功！为更新数据将刷新网页！');
+                    location.reload();
+                }
+                catch (err) {
+                    alert('载入错误！可在控制台查看错误信息。');
+                    console.log(err);
+                }
+            });
+
+            //randomresultimgvue = new Vue({el: '#randomresultimgdiv', data: { unitdata: [] }});
+
+            loadDataJson('unitdata.json');
+        </script>
+    </body>
 </html>

@@ -24,27 +24,27 @@ body{
     font-size: 14px;
     font-weight: bold;
 }
-#rarediv > div > * {
+#rarediv > div > div > * {
     min-width: 70px;
     width: 70px;
 }
-#positiondiv > div > * {
+#positiondiv > div > div  > * {
     min-width: 70px;
     width: 70px;
 }
-#costdiv > div > * {
+#costdiv > div  > div > * {
     min-width: 110px;
     width: 110px;
 }
-#costdiv > div > button {
+#costdiv > div  > div > button {
     min-width: 70px;
     width: 70px;
 }
-#chosendiv > div > * {
+#chosendiv > div  > div > * {
     min-width: 70px;
     width: 70px;
 }
-#sortdiv > div > * {
+#sortdiv > div  > div > * {
     min-width: 80px;
     width: 80px;
 }
@@ -72,12 +72,12 @@ body{
     font-size: 18px; 
     font-weight: bold;
 }
-.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a, #footerdiv, #rulerandomdiv, #randomcostavgdiv {
+.oneunittitlediv, .oneunitdetaildiv, .buttondiv, #navidiv, .chosendiv, .dropdown-menu.unit-class-list > li > a, #footerdiv, #randomrulediv, #randomcostavgdiv {
     display: flex;
 }
-.oneunittitlediv > *, .oneunitdetaildiv > *, .buttondiv > *, #navidiv > *, #rulerandomdiv > * {
-    flex: none;
-}
+    .oneunittitlediv > *, .oneunitdetaildiv > *, .buttondiv > *, #navidiv > *, #randomrulediv > * {
+        flex: none;
+    }
 .chosendiv {
     align-self: center;
 }
@@ -143,21 +143,28 @@ body{
 .dropdown-menu.unit-class-list > li > a > span, .chosendiv > span {
     padding-left: 3px;
 }
-#rulerandomdiv, #randomcostavgdiv {
-	flex-direction: row;
+#randomclosenumdiv, #randomfarnumdiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#randomrulediv, #randomcostavgdiv {
+    flex-direction: row;
     justify-content: space-around;
-	align-items: center;
+    align-items: center;
 }
-#randomcostavgdiv .random-limit-min, #randomcostavgdiv .random-limit-max {
-	width: 45px;
-	margin: 0 5px;
+#randomcostavgdiv input {
+    width: 45px;
 }
-#rulerandomdiv .btn-group > * {
-	min-width: 50px;
-	width: 50px;
+.random-limit-min, .random-limit-max {
+    margin: 0 5px;
 }
-#rulerandomdiv .btn-group li > a {
-	padding: 3px 15px;
+#randomrulediv .btn-group > * {
+    min-width: 50px;
+    width: 50px;
+}
+#randomrulediv .btn-group li > a {
+    padding: 3px 15px;
 }
 #footerdiv {
     z-index: 100;
